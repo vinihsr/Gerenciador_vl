@@ -1,0 +1,53 @@
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 2.5em;
+}
+
+.password-container button {
+    position: absolute;
+    right: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.eye {
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.eye.open {
+    transform: scale(1.1);
+}
+
+.eye.closed {
+    transform: scale(0.9);
+}
+
+svg {
+    height: 1.25em;
+    width: 1.25em;
+    color: #1E2547;
+}
+
+
+input:focus {
+    border-color: #1E2547;
+    box-shadow: 0 0 0 2px rgba(30, 37, 71, 0.2);
+  }
+  
+  button:focus {
+    box-shadow: 0 0 0 2px rgba(30, 37, 71, 0.2);
+  }
+  
