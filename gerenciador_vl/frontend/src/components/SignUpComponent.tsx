@@ -4,7 +4,7 @@ export const SignUpComponent = ({ setIsLogin }) => {
     return (
         <Box w="40vw" h="90vh" backgroundColor="white" display="flex" justifyContent="center" borderRadius="40">
             <Box display="flex" flexDir="column" justifyContent="center" alignItems="center">
-                <Text fontWeight="bold" fontSize="40px" color="#1E2547" mb={5}>SIGN UP</Text>
+                <Text fontWeight="bold" fontSize="40px" color="#1E2547" mb={5}>CADASTRE-SE</Text>
                 <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" gap={20} >
                     <Box display="flex" w="100%" flexDir="column" gap={5}>
                         <Input placeholder="Digite seu nome"></Input>

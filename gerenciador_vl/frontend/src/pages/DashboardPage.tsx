@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box } from "@chakra-ui/react";
 import SideBar from "../components/SideBarComponent";
+import ClientComponent from '../components/ClientComponent';
 
 export const DashboardPage = () => {
     const [currentSection, setCurrentSection] = useState('stats'); // Default section
@@ -35,8 +36,7 @@ const OrdersSection = () => (
 
 const ClientsSection = () => (
     <Box>
-        <h1>Clientes</h1>
-        <p>Display clients information here.</p>
+        <ClientComponent />
     </Box>
 );
 

@@ -1,6 +1,5 @@
-import db from '../Db.js';
+import db from '../db.js';
 
-// Função para buscar todos os clientes
 export async function getClientes() {
   try {
     const [rows] = await db.query('SELECT * FROM Clientes');
@@ -11,7 +10,6 @@ export async function getClientes() {
   }
 }
 
-// Função para criar um novo cliente
 export async function criarCliente(nome, endereco, telefone, email) {
   try {
     const [result] = await db.query(
@@ -25,7 +23,6 @@ export async function criarCliente(nome, endereco, telefone, email) {
   }
 }
 
-// Função para atualizar um cliente existente
 export async function atualizarCliente(id, nome, endereco, telefone, email) {
   try {
     const [result] = await db.query(
@@ -39,7 +36,6 @@ export async function atualizarCliente(id, nome, endereco, telefone, email) {
   }
 }
 
-// Função para excluir um cliente
 export async function excluirCliente(id) {
   try {
     const [result] = await db.query('DELETE FROM Clientes WHERE id = ?', [id]);
