@@ -18,7 +18,7 @@ const SideBar = ({ setCurrentSection }) => {
                 <Button w='150px' bgColor='#1E2547' _hover={{ bgColor: '#121628' }} color="#FFDF2B" border="#FFDF2B 3px solid" h='40px' onClick={() => setCurrentSection('clients')}><PlusSquareIcon mr={10} />Clientes</Button>
                 <Button w='150px' bgColor='#1E2547' _hover={{ bgColor: '#121628' }} color="#FFDF2B" border="#FFDF2B 3px solid" h='40px' onClick={() => setCurrentSection('stats')}><InfoOutlineIcon mr={10} />Estatisticas</Button>
                 <Button w='150px' bgColor='#1E2547' _hover={{ bgColor: '#121628' }} color="#FFDF2B" border="#FFDF2B 3px solid" h='40px' onClick={() => setCurrentSection('settings')}><SettingsIcon mr={10} />Config.</Button>
-                <Button bgColor='#FFDF2B' mt='4vh' w='6vw' fontSize='small' onClick={Logout}><ArrowLeftIcon mr={10}/>Logout</Button>
+                <Button bgColor='#FFDF2B' mt='4vh' w='6vw' fontSize='small' onClick={Logout}><ArrowLeftIcon mr={10}/>Sair</Button>
             </Grid>
         </Box>
     );
