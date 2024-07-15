@@ -2,6 +2,7 @@ import express from 'express';
 import clienteRouter from './routes/clienteRouter.js'
 import dotenv from 'dotenv';
 import cors from 'cors';
+import pedidosRouter from './routes/pedidosRouter.js'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,4 +22,5 @@ app.listen(PORT, () => {
 })
 
 app.use('/api', clienteRouter);
+app.use('/api', pedidosRouter);
 

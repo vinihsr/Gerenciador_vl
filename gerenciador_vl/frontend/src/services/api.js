@@ -14,8 +14,7 @@ export const getClientes = async () => {
   }
 };
 
-// Você pode adicionar outras funções de CRUD conforme necessário
-export const criarCliente = async (cliente) => {
+export const addCliente = async (cliente) => {
   try {
     const response = await api.post('/clientes', cliente);
     return response.data;
@@ -41,6 +40,46 @@ export const excluirCliente = async (id) => {
     return response.data;
   } catch (error) {
     console.error('Erro ao excluir cliente:', error);
+    throw error;
+  }
+};
+
+export const getOrders = async () => {
+  try {
+    const response = await api.get('/pedidos');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar pedidos:', error);
+    throw error;
+  }
+};
+
+export const addOrder = async (pedido) => {
+  try {
+    const response = await api.post('/pedidos', pedido);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar pedido:', error);
+    throw error;
+  }
+};
+
+export const atualizarOrder = async (id, pedido) => {
+  try {
+    const response = await api.put(`/pedidos/${id}`, pedido);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar pedido:', error);
+    throw error;
+  }
+};
+
+export const excluirOrder = async (id) => {
+  try {
+    const response = await api.delete(`/pedidos/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao excluir pedido:', error);
     throw error;
   }
 };
