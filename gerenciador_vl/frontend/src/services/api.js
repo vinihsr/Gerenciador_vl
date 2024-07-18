@@ -1,8 +1,29 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // Base URL da API
+    baseURL: 'http://localhost:3000/api'
 });
+
+export const register = async (nome, email, senha) => {
+    try {
+        const response = await api.post('/auth/register', { nome, email, senha });
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao registrar:", error);
+        throw error;
+    }
+};
+
+export const login = async (email, senha) => {
+    try {
+        const response = await api.post('/auth/login', { email, senha });
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao logar:", error);
+        throw error;
+    }
+};
+
 
 export const getClientes = async () => {
   try {
@@ -64,7 +85,7 @@ export const addOrder = async (pedido) => {
   }
 };
 
-export const atualizarOrder = async (id, pedido) => {
+export const updateOrder = async (id, pedido) => {
   try {
     const response = await api.put(`/pedidos/${id}`, pedido);
     return response.data;
@@ -74,7 +95,7 @@ export const atualizarOrder = async (id, pedido) => {
   }
 };
 
-export const excluirOrder = async (id) => {
+export const deleteOrder = async (id) => {
   try {
     const response = await api.delete(`/pedidos/${id}`);
     return response.data;

@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from "@chakra-ui/react";
 import SideBar from "../components/SideBarComponent";
 import ClientComponent from '../components/ClientComponent';
 import OrderComponent from '../components/PedidosComponent';
+import { useNavigate } from 'react-router-dom';
 
 export const DashboardPage = () => {
-    const [currentSection, setCurrentSection] = useState('stats'); // Default section
+    const [currentSection, setCurrentSection] = useState('stats');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/'); // Redireciona para a página de login se não houver token
+        }
+    }, [navigate]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Remove o token do localStorage ao deslogar
+        navigate('/'); // Redireciona para a página de login após o logout
+    };
 
     return (
         <Box display="flex">
-            <SideBar setCurrentSection={setCurrentSection} />
+            <SideBar setCurrentSection={setCurrentSection} handleLogout={handleLogout} />
             <Box flex="1" p="4">
                 {currentSection === 'stats' && <StatsSection />}
                 {currentSection === 'orders' && <OrdersSection />}
@@ -30,7 +44,7 @@ const StatsSection = () => (
 
 const OrdersSection = () => (
     <Box>
-        <OrderComponent/>
+        <OrderComponent />
     </Box>
 );
 

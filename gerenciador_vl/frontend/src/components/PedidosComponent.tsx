@@ -22,8 +22,9 @@ import {
   FormLabel,
   Input,
 } from '@chakra-ui/react';
-import { getOrders, addOrder } from '../services/api';
-import { PlusSquareIcon } from '@chakra-ui/icons';
+import { getOrders, addOrder, updateOrder, deleteOrder } from '../services/api';
+import { DeleteIcon, EditIcon, PlusSquareIcon } from '@chakra-ui/icons';
+import { format } from 'date-fns';
 
 const OrderComponent: React.FC = () => {
   const [orders, setOrders] = useState([]);
@@ -31,6 +32,8 @@ const OrderComponent: React.FC = () => {
   const [data, setData] = useState('');
   const [valor, setValor] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editOrderId, setEditOrderId] = useState(null);
   const [overlay, setOverlay] = useState(<ModalOverlay />);
 
   useEffect(() => {
@@ -48,12 +51,20 @@ const OrderComponent: React.FC = () => {
   }, []);
 
   const handleAddOrder = async () => {
+    if (isNaN(clienteId)) {
+      console.error('Cliente ID deve ser um número');
+      return;
+    }
+
+    const formattedDate = format(new Date(data), 'yyyy-MM-dd');
     const newOrder = {
-      cliente_id: clienteId,
-      data,
+      cliente_id: parseInt(clienteId, 10), // Convertendo clienteId para inteiro
+      data: formattedDate,
       valor: parseFloat(valor.replace(',', '.')), // Convertendo vírgula para ponto
     };
-  
+
+    console.log('Recebendo solicitação para POST /pedidos com dados:', newOrder);
+
     try {
       await addOrder(newOrder);
       const ordersData = await getOrders();
@@ -61,6 +72,41 @@ const OrderComponent: React.FC = () => {
       onClose(); // Fechar o modal após o cadastro
     } catch (error) {
       console.error('Erro ao adicionar pedido:', error);
+    }
+  };
+
+  const handleEditOrder = (order) => {
+    setClienteId(order.cliente_id);
+    setData(format(new Date(order.data), 'yyyy-MM-dd'));
+    setValor(order.valor);
+    setEditOrderId(order.pedido_id);
+    setIsEditOpen(true);
+  };
+
+  const handleUpdateOrder = async () => {
+    const updatedOrder = {
+      cliente_id: parseInt(clienteId, 10),
+      data: format(new Date(data), 'yyyy-MM-dd'),
+      valor: parseFloat(valor.replace(',', '.')),
+    };
+
+    try {
+      await updateOrder(editOrderId, updatedOrder);
+      const ordersData = await getOrders();
+      setOrders(ordersData);
+      setIsEditOpen(false); // Fechar o modal após a atualização
+    } catch (error) {
+      console.error('Erro ao atualizar pedido:', error);
+    }
+  };
+
+  const handleDeleteOrder = async (id) => {
+    try {
+      await deleteOrder(id);
+      const ordersData = await getOrders();
+      setOrders(ordersData);
+    } catch (error) {
+      console.error('Erro ao excluir pedido:', error);
     }
   };
 
@@ -97,6 +143,7 @@ const OrderComponent: React.FC = () => {
                 <Th>Cliente Id</Th>
                 <Th>Data</Th>
                 <Th>Valor</Th>
+                <Th></Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -104,8 +151,27 @@ const OrderComponent: React.FC = () => {
                 <Tr key={order.pedido_id}>
                   <Td>{order.pedido_id}</Td>
                   <Td>{order.cliente_id}</Td>
-                  <Td>{order.data}</Td>
+                  <Td>{format(new Date(order.data), 'dd/MM/yyyy')}</Td>
                   <Td>{order.valor}</Td>
+                  <Td>
+                    <Button
+                      size="sm"
+                      bgColor='#1E2547'
+                      _hover={{ bgColor : '#1E2381' }}
+                      color='white'
+                      onClick={() => handleEditOrder(order)}
+                    >
+                      <EditIcon />
+                    </Button>
+                    <Button
+                      size="sm"
+                      colorScheme="red"
+                      ml={10}
+                      onClick={() => handleDeleteOrder(order.pedido_id)}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </Td>
                 </Tr>
               ))}
             </Tbody>
@@ -152,6 +218,49 @@ const OrderComponent: React.FC = () => {
           <ModalFooter>
             <Button colorScheme='red' onClick={onClose}>Fechar</Button>
             <Button ml={2} colorScheme='yellow' onClick={handleAddOrder}>Cadastrar</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isCentered isOpen={isEditOpen} onClose={() => setIsEditOpen(false)}>
+        {overlay}
+        <ModalContent>
+          <ModalHeader>Editar Pedido</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl isRequired>
+              <FormLabel mb={2}>Cliente Id:</FormLabel>
+              <Input
+                mb={4}
+                placeholder='Insira o ID do cliente aqui:'
+                value={clienteId}
+                onChange={(e) => setClienteId(e.target.value)}
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel mb={2}>Data:</FormLabel>
+              <Input
+                mb={4}
+                type='date'
+                placeholder='Insira a data aqui:'
+                value={data}
+                onChange={(e) => setData(e.target.value)}
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel mb={2}>Valor:</FormLabel>
+              <Input
+                mb={4}
+                placeholder='Insira o valor aqui:'
+                value={valor}
+                onChange={(e) => setValor(e.target.value)}
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme='red' onClick={() => setIsEditOpen(false)}>Fechar</Button>
+            <Button ml={2} colorScheme='blue' onClick={handleUpdateOrder}>Atualizar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
